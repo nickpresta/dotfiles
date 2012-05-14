@@ -1,0 +1,28 @@
+[user]
+  name = Nick Presta
+  email = nick@nickpresta.ca
+
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+
+[alias]
+  st = status
+  ci = commit
+  cia = commit --amend
+  co = checkout
+  br = branch
+  sb = show-branch
+  cp = cherry-pick
+  staged = diff --cached
+  rb = rebase
+  rbc = rebase --continue
+  rbs = rebase --skip
+  rl = reflog
+  rs = remote show
+  rt = remote
+  ru = remote update
+  rp = remote prune
+  sm = submodule
+  hist = log --pretty=format:"%h %ad | %s%d [%an]" --graph --date=short
