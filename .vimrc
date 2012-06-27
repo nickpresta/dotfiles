@@ -12,7 +12,7 @@ filetype plugin on
 
 set expandtab
 set smarttab
-set tabstop=2 shiftwidth=2
+set tabstop=4 shiftwidth=4
 
 set cindent
 set autoindent
@@ -23,6 +23,8 @@ set incsearch
 
 set backspace=2
 set grepprg=grep\ -nH\ $*
+
+call pathogen#infect()
 
 " ---------------------------------
 "  Highlighting
@@ -52,6 +54,8 @@ set background=dark
 
 syntax on
 colorscheme evening
+set t_Co=256
+set term=xterm-256color
 
 if has('gui_running')
   set guifont=DejaVu\ Sans\ Mono\ 18
@@ -99,6 +103,9 @@ autocmd FileType python set nocindent shiftwidth=4 ts=4
 autocmd FileType go set nocindent shiftwidth=4 ts=4 noexpandtab
 autocmd BufRead,BufNewFile *.go setfiletype go
 
+" For django templates
+autocmd BufRead,BufNewFile *.html setfiletype htmldjango
+
 " Change to directory file is in without crippling commandline
 autocmd BufEnter * silent! lcd %:p:h:gs/ /\\ /
 
@@ -118,3 +125,23 @@ augroup END
 nnoremap gr gd[{V%:s/<C-R>///gc<left><left><left>
 " For global replace
 nnoremap gR gD:%s/<C-R>///gc<left><left><left>
+
+" ---------------------------------
+"  TODO list
+" ---------------------------------
+
+noremap <Leader>t :noautocmd vimgrep /TODO(nick)/j **/*.py<CR>:cw<CR>
+
+" ---------------------------------
+"  NERDTree
+" ---------------------------------
+
+autocmd vimenter * if !argc() | NERDTree | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+" ---------------------------------
+"  Highlight over 79cols
+" ---------------------------------
+
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+match OverLength /\%80v.\+/
