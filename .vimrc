@@ -2,6 +2,8 @@
 "  General
 " ---------------------------------
 
+call pathogen#infect()
+
 set nocompatible
 set showcmd
 set autoread
@@ -24,7 +26,31 @@ set incsearch
 set backspace=2
 set grepprg=grep\ -nH\ $*
 
-call pathogen#infect()
+set noeb
+set vb t_vb=
+
+let mapleader=","
+
+" Save when losing focus
+au FocusLost * :wa
+
+" Split window and switch to it
+nnoremap <leader>w <C-w>v<C-w>l
+
+" ---------------------------------
+" Sane Regex Handling
+" ---------------------------------
+nnoremap / /\v
+vnoremap / /\v
+set ignorecase
+set smartcase
+set gdefault
+set incsearch
+set showmatch
+set hlsearch
+nnoremap <leader><space> :noh<cr>
+nnoremap <tab> %
+vnoremap <tab> %
 
 " ---------------------------------
 "  Highlighting
@@ -53,7 +79,7 @@ set background=dark
 " ---------------------------------
 
 syntax on
-colorscheme evening
+colorscheme slate
 set t_Co=256
 set term=xterm-256color
 
