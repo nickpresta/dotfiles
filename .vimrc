@@ -2,9 +2,8 @@
 "  General
 " ---------------------------------
 
-call pathogen#infect()
-
 set nocompatible
+set modeline
 set showcmd
 set autoread
 
@@ -29,28 +28,7 @@ set grepprg=grep\ -nH\ $*
 set noeb
 set vb t_vb=
 
-let mapleader=","
-
-" Save when losing focus
-au FocusLost * :wa
-
-" Split window and switch to it
-nnoremap <leader>w <C-w>v<C-w>l
-
-" ---------------------------------
-" Sane Regex Handling
-" ---------------------------------
-nnoremap / /\v
-vnoremap / /\v
-set ignorecase
-set smartcase
-set gdefault
-set incsearch
-set showmatch
-set hlsearch
-nnoremap <leader><space> :noh<cr>
-nnoremap <tab> %
-vnoremap <tab> %
+call pathogen#infect()
 
 " ---------------------------------
 "  Highlighting
@@ -129,6 +107,10 @@ autocmd FileType python set nocindent shiftwidth=4 ts=4
 autocmd FileType go set nocindent shiftwidth=4 ts=4 noexpandtab
 autocmd BufRead,BufNewFile *.go setfiletype go
 
+" for Coffeescript
+autocmd FileType coffeescript set nocindent shiftwidth=2 ts=2 noexpandtab
+autocmd BufRead,BufNewFile *.coffee setfiletype coffeescript
+
 " For django templates
 autocmd BufRead,BufNewFile *.html setfiletype htmldjango
 
@@ -142,6 +124,14 @@ augroup content
      \ $put = '' |
      \ norm gg19jf]
 augroup END
+
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+autocmd FileType c set omnifunc=ccomplete#Complete
 
 " ---------------------------------
 "  Remaps and Replaces
@@ -169,5 +159,19 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 "  Highlight over 79cols
 " ---------------------------------
 
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-match OverLength /\%80v.\+/
+"highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+"match OverLength /\%80v.\+/
+
+" ---------------------------------
+" Disable Arrow keys (use hjkl!)
+" ---------------------------------
+noremap   <Up>     <NOP>
+noremap   <Down>   <NOP>
+noremap   <Left>   <NOP>
+noremap   <Right>  <NOP>
+
+"
+" vim-flake8 settings
+"
+autocmd FileType python map <buffer> <Leader><F8> :call Flake8()<CR>
+let g:flake8_max_line_length=200 " We don't have a max line length

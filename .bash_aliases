@@ -14,35 +14,25 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # some more ls aliases
+alias ls='ls -F -G'
+alias ll='ls -la'
 alias rm='rm -i'
 alias webshare='python -m SimpleHTTPServer'
-alias loc='cloc -no3'
-alias mvn='/opt/apache-maven-3.0.3/bin/mvn'
 
-function eregex {
-    perl -e "use YAPE::Regex::Explain; 
-    print YAPE::Regex::Explain->new( qr/$@/ )->explain;"
+alias pep8='pep8 --ignore=E501'
+
+function _ssh_completion() {
+    perl -ne 'print "$1 " if /^Host (.+)$/' ~/.ssh/config
 }
+complete -W "$(_ssh_completion)" ssh
 
-function gogo() {
-    6g -o gotmp.6 $@;
-    6l -o $(basename $@ .go) gotmp.6;
-    rm -f gotmp.6;
+# Efficiency aliases
+alias s='sudo'
+alias g='git'
+
+# Homebrew aliases
+function homebrew_rm() {
+    formula="$1"
+    brew rm $formula
+    brew rm $(join <(brew leaves) <(brew deps $formula))
 }
-
-function setdsm() {
-    # add the current directory and the parent directory to PYTHONPATH
-    # sets DJANGO_SETTINGS_MODULE
-    export PYTHONPATH=$PYTHONPATH:$PWD/..
-    export PYTHONPATH=$PYTHONPATH:$PWD
-    if [ -z "$1" ]; then
-        x=${PWD/\/[^\/]*\/}
-        export DJANGO_SETTINGS_MODULE=$x.settings
-    else
-        export DJANGO_SETTINGS_MODULE=$1
-    fi
-
-    echo "DJANGO_SETTINGS_MODULE set to $DJANGO_SETTINGS_MODULE"
-}
-
-alias weblog='tail -f /var/log/nginx/access.log | ccze --plugin=httpd'
