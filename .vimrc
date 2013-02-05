@@ -2,6 +2,8 @@
 "  General
 " ---------------------------------
 
+set encoding=utf-8
+
 set nocompatible
 set modeline
 set showcmd
@@ -61,16 +63,13 @@ colorscheme slate
 set t_Co=256
 set term=xterm-256color
 
-if has('gui_running')
-  set guifont=DejaVu\ Sans\ Mono\ 18
-endif
-
 " ---------------------------------
 "  Status Line
 " ---------------------------------
 
 set laststatus=2
-set statusline=%F%m%r%h%w\ (%{&ff}){%Y}\ [%l,%v][%p%%]
+"set statusline=%F%m%r%h%w\ (%{&ff}){%Y}\ [%l,%v][%p%%]
+python from powerline.bindings.vim import source_plugin; source_plugin()
 
 " ---------------------------------
 "  Open URL in Browser
@@ -104,34 +103,27 @@ autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
 autocmd FileType python set nocindent shiftwidth=4 ts=4
 
 " for Go
-autocmd FileType go set nocindent shiftwidth=4 ts=4 noexpandtab
 autocmd BufRead,BufNewFile *.go setfiletype go
+autocmd FileType go set nocindent shiftwidth=4 ts=4 noexpandtab
 
 " for Coffeescript
-autocmd FileType coffeescript set nocindent shiftwidth=2 ts=2 noexpandtab
-autocmd BufRead,BufNewFile *.coffee setfiletype coffeescript
+au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab
 
 " For django templates
 autocmd BufRead,BufNewFile *.html setfiletype htmldjango
+autocmd FileType html set shiftwidth=2 ts=2
+autocmd FileType css set shiftwidth=2 ts=2
+autocmd FileType htmldjango set shiftwidth=2 ts=2
 
 " Change to directory file is in without crippling commandline
 autocmd BufEnter * silent! lcd %:p:h:gs/ /\\ /
 
 augroup content
   autocmd BufNewFile *.py
-     \ 0put = '#!/usr/bin/env python'  |
-     \ 1put = '#-*- coding: utf-8 -*-' |
+     \ 0put = '#-*- coding: utf-8 -*-' |
      \ $put = '' |
      \ norm gg19jf]
 augroup END
-
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-autocmd FileType c set omnifunc=ccomplete#Complete
 
 " ---------------------------------
 "  Remaps and Replaces
@@ -149,18 +141,10 @@ nnoremap gR gD:%s/<C-R>///gc<left><left><left>
 noremap <Leader>t :noautocmd vimgrep /TODO(nick)/j **/*.py<CR>:cw<CR>
 
 " ---------------------------------
-"  NERDTree
+"  Highlight 120 column
 " ---------------------------------
 
-autocmd vimenter * if !argc() | NERDTree | endif
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-
-" ---------------------------------
-"  Highlight over 79cols
-" ---------------------------------
-
-"highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-"match OverLength /\%80v.\+/
+set cc=120
 
 " ---------------------------------
 " Disable Arrow keys (use hjkl!)
@@ -175,3 +159,5 @@ noremap   <Right>  <NOP>
 "
 autocmd FileType python map <buffer> <Leader><F8> :call Flake8()<CR>
 let g:flake8_max_line_length=200 " We don't have a max line length
+
+let g:syntastic_python_checker_args='--ignore=E501'
